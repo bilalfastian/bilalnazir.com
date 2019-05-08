@@ -40,7 +40,7 @@ export default class Sidebar extends Component{
           <div className="sidebar sticky">
             <div itemScope="" itemType="http://schema.org/Person">
               <div className="author__avatar">
-                <img src="/images/bio-photo.jpg" className="author__avatar" alt="Bilal Nazir" itemProp="image" />
+                <img src="bio-photo.jpg" className="author__avatar" alt="Bilal Nazir" itemProp="image" />
               </div>
 
               {/* <div className="author__content">

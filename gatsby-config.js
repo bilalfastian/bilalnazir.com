@@ -34,13 +34,13 @@ module.exports = {
         path: `${__dirname}/content`
       }
     },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        name: "posts",
-        path: `${__dirname}/public/images`
-      }
-    },    
+    // {
+    //   resolve: "gatsby-source-filesystem",
+    //   options: {
+    //     name: "posts",
+    //     path: `${__dirname}/public/assets/images`
+    //   }
+    // },    
     {
       resolve: "gatsby-transformer-remark",
       options: {
