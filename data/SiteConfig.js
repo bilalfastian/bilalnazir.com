@@ -3,8 +3,8 @@ const config = {
   siteTitleShort: "Bilal Nazir", // Short site title for homescreen (PWA). Preferably should be under 12 characters to prevent truncation.
   siteTitleAlt: "Bilal Nazir | Full Stack Developer", // Alternative site title for SEO.
   siteLogo: "/logos/logo-1024.png", // Logo used for SEO and manifest.
-  siteUrl: "bilalnazir.com", // Domain of your website without pathPrefix.
-  pathPrefix: "/gatsby-advanced-starter", // Prefixes all links. For cases when deployed to example.github.io/gatsby-advanced-starter/.
+  siteUrl: "http://bilalnazir.com", // Domain of your website without pathPrefix.
+  pathPrefix: "", // Prefixes all links. For cases when deployed to example.github.io/gatsby-advanced-starter/.
   siteDescription: "Bilal Nazir | Full Stack Developer - portfolio and personal blog site", // Website description used for RSS feeds/meta description tag.
   siteRss: "/rss.xml", // Path to the RSS file.
   // siteFBAppID: "1825356251115265", // FB Application ID for using app insights

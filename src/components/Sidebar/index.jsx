@@ -10,11 +10,15 @@ export default class Sidebar extends Component{
     }
 
     componentWillMount(){
-      document.addEventListener('mousedown', this.handleClick, false);
+      if (typeof document !== `undefined`) {
+        document.addEventListener('mousedown', this.handleClick, false);
+      }
     }
 
     componentWillUnmount(){
-      document.removeEventListener('mousedown', this.handleClick, false);
+      if (typeof document !== `undefined`) {
+        document.removeEventListener('mousedown', this.handleClick, false);
+      }
     }
 
     handleClick = (e) => {
