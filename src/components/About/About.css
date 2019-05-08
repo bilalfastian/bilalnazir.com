@@ -1,0 +1,22 @@
+.about {
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+    min-height: 300px;
+
+}
+
+.about .sidebarProfile,
+.about .aboutMe {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 800px){
+    .about {
+        flex-wrap: wrap;
+    }
+}
