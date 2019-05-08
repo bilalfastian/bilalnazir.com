@@ -4,7 +4,7 @@ import Masthead from '../components/Masthead';
 import Footer from '../components/Footer/Footer';
 import config from "../../data/SiteConfig";
 import "./index.css";
-import "../../static/_sass/minimal-mistakes.scss";
+import "../../static/assets/_sass/minimal-mistakes.scss";
 
 export default class MainLayout extends React.Component {
   render() {
