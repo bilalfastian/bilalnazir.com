@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { useQuery, gql } from '@apollo/client';
+// import { useQuery, gql } from '@apollo/client';
 import PageDescription from "../PageDescription/PageDescription";
 import SocialMediaIcons from "../SocialMediaIcons/SocialMediaIcons";
 import { BLOCKS, MARKS } from "@contentful/rich-text-types"

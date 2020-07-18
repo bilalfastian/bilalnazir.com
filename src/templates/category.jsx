@@ -14,14 +14,14 @@ export default function CategoryTemplate(props) {
   } = props;
 
   const postEdges = allMarkdownRemark.edges;
-  const authorsEdges = authors.edges;
+  // const authorsEdges = authors.edges;
   return (
       <Layout location={location}>
         <div className="category-container">
           <Helmet
               title={`Posts in category "${category}" | ${config.siteTitle}`}
           />
-          <PostListing postEdges={postEdges} postAuthors={authorsEdges} />
+          <PostListing postEdges={postEdges} />
         </div>
       </Layout>
   );

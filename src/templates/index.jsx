@@ -20,7 +20,7 @@ import PageDescription from "../components/PageDescription/PageDescription";
 import SocialMediaIcons from "../components/SocialMediaIcons/SocialMediaIcons";
 import Layout from "../components/layout";
 import "../components/index.css";
-import {gql} from "@apollo/client";
+// import {gql} from "@apollo/client";
 
 export default function IndexTemplate(props){
 
@@ -72,29 +72,29 @@ export default function IndexTemplate(props){
   );
 
 }
-export const query = gql`
-  {
-   blogModelCollection (limit: 1){
-    items {
-      name
-      description
-      roles
-      profile {
-        url
-      }
-      socialLinks2
-      shortBio {
-        json
-        links {
-          entries {
-            inline {
-              sys {
-                id
-              }
-            }
-          }
-        }
-      }      
-    }
-  }
-}`;
+// export const query = gql`
+//   {
+//    blogModelCollection (limit: 1){
+//     items {
+//       name
+//       description
+//       roles
+//       profile {
+//         url
+//       }
+//       socialLinks2
+//       shortBio {
+//         json
+//         links {
+//           entries {
+//             inline {
+//               sys {
+//                 id
+//               }
+//             }
+//           }
+//         }
+//       }      
+//     }
+//   }
+// }`;

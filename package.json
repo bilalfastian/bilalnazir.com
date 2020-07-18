@@ -1,19 +1,13 @@
 {
-  "name": "gatsby-starter-casper",
-  "description": "GatsbyJS starter that themed with the Casper theme from Ghost.",
+  "name": "bilalnazir.com",
+  "description": "Bilal Nazir | Full Stack Developer - portfolio and personal blog site.",
   "version": "2.0.0",
-  "author": "Hays Clark <hays.clark@gmail.com>",
+  "author": "Bilal Nazir <bilal.nazirahmad@gmail.com>",
   "dependencies": {
-    "@apollo/client": "^3.0.2",
     "@contentful/gatsby-transformer-contentful-richtext": "^13.1.0",
     "@contentful/rich-text-react-renderer": "^14.1.1",
-    "apollo-cache-inmemory": "^1.6.6",
-    "apollo-link": "^1.2.14",
-    "apollo-link-error": "^1.1.13",
-    "apollo-link-http": "^1.5.17",
     "babel-eslint": "^10.0.1",
     "babel-plugin-lodash": "^3.3.4",
-    "background-check": "git+https://github.com/kennethcachia/background-check.git",
     "classnames": "^2.2.6",
     "flexboxgrid": "^6.3.1",
     "gatsby": "^2.0.20",
@@ -44,7 +38,6 @@
     "moment": "^2.22.2",
     "prismjs": "^1.20.0",
     "react": "^16.5.2",
-    "react-apollo": "^3.1.5",
     "react-disqus-comments": "^1.2.0",
     "react-dom": "^16.5.2",
     "react-gravatar": "^2.6.3",
@@ -76,8 +69,8 @@
   "keywords": [
     "gatsby",
     "blog",
-    "casper",
-    "starter"
+    "bilalfastian",
+    "fullstack"
   ],
   "license": "MIT",
   "main": "n/a",

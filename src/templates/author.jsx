@@ -53,23 +53,23 @@ class AuthorTemplate extends React.Component {
   render() {
     const {
       location,
-      data: { allMarkdownRemark, allAuthorsJson },
-      pageContext: { author, cover }
+      data: { allMarkdownRemark },
+      pageContext: { cover }
     } = this.props;
     const { menuOpen } = this.state;
 
-    const postEdges =
-      allMarkdownRemark && allMarkdownRemark.edges
-        ? allMarkdownRemark.edges
-        : [];
-    const authorsEdges =
-      allAuthorsJson && allAuthorsJson.edges ? allAuthorsJson.edges : [];
-    const getAuthor = () => authorsEdges[0].node;
+    // const postEdges =
+    //   allMarkdownRemark && allMarkdownRemark.edges
+    //     ? allMarkdownRemark.edges
+    //     : [];
+    // const authorsEdges =
+    //   allAuthorsJson && allAuthorsJson.edges ? allAuthorsJson.edges : [];
+    // const getAuthor = () => authorsEdges[0].node;
 
     return (
-      <Layout location={location}>
-        <Drawer className="author-template" isOpen={menuOpen}>
-          <Helmet title={`Posts by "${author}" | ${config.siteTitle}`} />
+      <Layout >
+        <Drawer className="author-template">
+          <Helmet title={`Posts by  | ${config.siteTitle}`} />
 
           {/* The blog navigation links */}
           <Navigation config={config} onClose={this.handleOnClose} />
@@ -85,23 +85,7 @@ class AuthorTemplate extends React.Component {
               </MainNav>
             </MainHeader>
 
-            <AuthorProfile className="inner">
-              <AuthorImage author={getAuthor()} />
-              <AuthorName name={getAuthor().name} />
-              <AuthorBio bio={getAuthor().bio} />
-              <AuthorMeta>
-                <AuthorLocation location={getAuthor().location} />
-                <AuthorWebsite url={getAuthor().url} />
-              </AuthorMeta>
-              <AuthorStats postEdges={postEdges} />
-            </AuthorProfile>
-
-            {/* PostListing component renders all the posts */}
-            <PostListing postEdges={postEdges} postAuthors={authorsEdges} />
-
-            {/* Social information here */}
-            <SocialMediaIcons urls={getAuthor().socialUrls} />
-
+          
             {/* The tiny footer at the very bottom */}
             <Footer
               copyright={config.copyright}
@@ -114,46 +98,6 @@ class AuthorTemplate extends React.Component {
   }
 }
 
-/* eslint no-undef: "off" */
-// export const pageQuery = graphql`
-//   query AuthorPage($author: String) {
-//     allMarkdownRemark(
-//       limit: 1000
-//       sort: { fields: [frontmatter___date], order: DESC }
-//       filter: { frontmatter: { author: { eq: $author } } }
-//     ) {
-//       totalCount
-//       edges {
-//         node {
-//           fields {
-//             slug
-//           }
-//           excerpt
-//           timeToRead
-//           frontmatter {
-//             title
-//             tags
-//             cover
-//             date
-//             author
-//           }
-//         }
-//       }
-//     }
-//     allAuthorsJson(filter: { uid: { eq: $author } }) {
-//       edges {
-//         node {
-//           uid
-//           name
-//           image
-//           url
-//           bio
-//           location
-//           socialUrls
-//         }
-//       }
-//     }
-//   }
-// `;
+
 
 export default AuthorTemplate;

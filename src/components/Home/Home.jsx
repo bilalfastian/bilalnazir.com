@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery, gql } from '@apollo/client';
+// import { useQuery, gql } from '@apollo/client';
 import NameWithDesignation from "../NameWithDesignation/NameWithDesignation";
 import PageDescription from "../PageDescription/PageDescription";
 import SocialMediaIcons from "../SocialMediaIcons/SocialMediaIcons";
