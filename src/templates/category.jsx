@@ -1,33 +1,61 @@
+import { graphql } from "gatsby";
 import React from "react";
 import Helmet from "react-helmet";
-import { graphql } from "gatsby";
-import Layout from "../layout";
 import PostListing from "../components/PostListing/PostListing";
 import config from "../../data/SiteConfig";
+import Layout from "../components/layout";
 
-export default class CategoryTemplate extends React.Component {
-  render() {
-    const { category } = this.props.pageContext;
-    const postEdges = this.props.data.allMarkdownRemark.edges;
-    return (
-      <Layout>
+
+export default function CategoryTemplate(props) {
+  const {
+    location,
+    pageContext: { category },
+    data: { allMarkdownRemark, authors }
+  } = props;
+
+  const postEdges = allMarkdownRemark.edges;
+  const authorsEdges = authors.edges;
+  return (
+      <Layout location={location}>
         <div className="category-container">
           <Helmet
-            title={`Posts in category "${category}" | ${config.siteTitle}`}
+              title={`Posts in category "${category}" | ${config.siteTitle}`}
           />
-          <PostListing postEdges={postEdges} />
+          <PostListing postEdges={postEdges} postAuthors={authorsEdges} />
         </div>
       </Layout>
-    );
-  }
+  );
 }
+
+// class CategoryTemplate extends React.Component {
+//   render() {
+//     const {
+//       location,
+//       pageContext: { category },
+//       data: { allMarkdownRemark, authors }
+//     } = this.props;
+//
+//     const postEdges = allMarkdownRemark.edges;
+//     const authorsEdges = authors.edges;
+//     return (
+//       <Layout location={location}>
+//         <div className="category-container">
+//           <Helmet
+//             title={`Posts in category "${category}" | ${config.siteTitle}`}
+//           />
+//           <PostListing postEdges={postEdges} postAuthors={authorsEdges} />
+//         </div>
+//       </Layout>
+//     );
+//   }
+// }
 
 /* eslint no-undef: "off" */
 export const pageQuery = graphql`
   query CategoryPage($category: String) {
     allMarkdownRemark(
       limit: 1000
-      sort: { fields: [fields___date], order: DESC }
+      sort: { fields: [frontmatter___date], order: DESC }
       filter: { frontmatter: { category: { eq: $category } } }
     ) {
       totalCount
@@ -35,7 +63,6 @@ export const pageQuery = graphql`
         node {
           fields {
             slug
-            date
           }
           excerpt
           timeToRead
@@ -50,3 +77,5 @@ export const pageQuery = graphql`
     }
   }
 `;
+
+// export default CategoryTemplate;

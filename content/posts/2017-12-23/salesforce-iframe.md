@@ -1,6 +1,8 @@
 ---
 title: Safely Integrating Force.com Site using Iframe
-cover: "https://unsplash.it/400/300/?random?BoldMage"
+cover: "clickjacking-attacks.png"
+date: 2017-12-23 00:00:00 Z
+covercredit : ''
 analytics: true
 categories:
     - Salesforce

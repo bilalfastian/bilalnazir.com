@@ -1,0 +1,34 @@
+.title-typed {
+    margin-bottom: 40px;
+}
+
+.title-typed .typed-title,
+.title-typed .page-title {
+    display: inline;
+}
+
+.title-typed .page-title {
+    font-size: 7rem;
+}
+
+.typed-title {
+    color: var(--theme-ui-colors-accent,rgb(61,136,221))
+}
+
+@media only screen and (max-width: 768px) {
+    .title-typed .typed-title,
+    .title-typed .page-title {
+        display: block;
+    }
+}
+@media only screen and (max-width: 500px) {
+
+    .title-typed .page-title {
+        font-size: 5rem;
+    }
+
+    .title-typed .typed-title {
+        font-size: 2.2rem;
+    }
+
+}

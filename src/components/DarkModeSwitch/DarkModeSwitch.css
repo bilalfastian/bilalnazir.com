@@ -1,0 +1,10 @@
+.dark .theme-switch {
+    fill: #ffffff;
+}
+
+@media only screen and (max-width: 500px) {
+ svg.theme-switch {
+     display: block;
+     height: 20px;
+ }
+}

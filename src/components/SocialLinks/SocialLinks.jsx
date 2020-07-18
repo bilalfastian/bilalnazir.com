@@ -1,23 +1,5 @@
 import React, { Component } from "react";
-import {
-  FacebookShareButton,
-  GooglePlusShareButton,
-  LinkedinShareButton,
-  TwitterShareButton,
-  TelegramShareButton,
-  RedditShareButton,
-  FacebookShareCount,
-  GooglePlusShareCount,
-  LinkedinShareCount,
-  RedditShareCount,
-  FacebookIcon,
-  TwitterIcon,
-  TelegramIcon,
-  GooglePlusIcon,
-  LinkedinIcon,
-  RedditIcon
-} from "react-share";
-import urljoin from "url-join";
+import { ShareButtons, ShareCounts, generateShareIcon } from "react-share";
 import config from "../../../data/SiteConfig";
 import "./SocialLinks.css";
 
@@ -25,19 +7,37 @@ class SocialLinks extends Component {
   render() {
     const { postNode, postPath, mobile } = this.props;
     const post = postNode.frontmatter;
-    const url = urljoin(config.siteUrl, config.pathPrefix, postPath);
+    const url = config.siteUrl + config.pathPrefix + postPath;
+    const {
+      FacebookShareButton,
+      GooglePlusShareButton,
+      LinkedinShareButton,
+      TwitterShareButton,
+      TelegramShareButton,
+      RedditShareButton
+    } = ShareButtons;
+    const {
+      FacebookShareCount,
+      GooglePlusShareCount,
+      LinkedinShareCount,
+      RedditShareCount
+    } = ShareCounts;
+
+    const FacebookIcon = generateShareIcon("facebook");
+    const TwitterIcon = generateShareIcon("twitter");
+    const TelegramIcon = generateShareIcon("telegram");
+    const GooglePlusIcon = generateShareIcon("google");
+    const LinkedinIcon = generateShareIcon("linkedin");
+    const RedditIcon = generateShareIcon("reddit");
     const iconSize = mobile ? 36 : 48;
     const filter = count => (count > 0 ? count : "");
-    const renderShareCount = count => (
-      <div className="share-count">{filter(count)}</div>
-    );
 
     return (
       <div className="social-links">
         <RedditShareButton url={url} title={post.title}>
           <RedditIcon round size={iconSize} />
           <RedditShareCount url={url}>
-            {count => renderShareCount(count)}
+            {count => <div className="share-count">{filter(count)}</div>}
           </RedditShareCount>
         </RedditShareButton>
         <TwitterShareButton url={url} title={post.title}>
@@ -46,13 +46,13 @@ class SocialLinks extends Component {
         <GooglePlusShareButton url={url}>
           <GooglePlusIcon round size={iconSize} />
           <GooglePlusShareCount url={url}>
-            {count => renderShareCount(count)}
+            {count => <div className="share-count">{filter(count)}</div>}
           </GooglePlusShareCount>
         </GooglePlusShareButton>
-        <FacebookShareButton url={url} quote={postNode.excerpt}>
+        <FacebookShareButton url={url} quote={postNode.title}>
           <FacebookIcon round size={iconSize} />
           <FacebookShareCount url={url}>
-            {count => renderShareCount(count)}
+            {count => <div className="share-count">{filter(count)}</div>}
           </FacebookShareCount>
         </FacebookShareButton>
         <LinkedinShareButton
@@ -62,7 +62,7 @@ class SocialLinks extends Component {
         >
           <LinkedinIcon round size={iconSize} />
           <LinkedinShareCount url={url}>
-            {count => renderShareCount(count)}
+            {count => <div className="share-count">{filter(count)}</div>}
           </LinkedinShareCount>
         </LinkedinShareButton>
         <TelegramShareButton url={url}>

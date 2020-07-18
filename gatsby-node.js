@@ -1,51 +1,12 @@
 const path = require("path");
 const _ = require("lodash");
-const moment = require("moment");
+const fs = require("fs");
+const webpackLodashPlugin = require("lodash-webpack-plugin");
+const {
+  createLinkedPages,
+  createPaginationPages
+} = require("gatsby-pagination");
 const siteConfig = require("./data/SiteConfig");
-
-const postNodes = [];
-
-function addSiblingNodes(createNodeField) {
-  postNodes.sort(
-    ({ frontmatter: { date: date1 } }, { frontmatter: { date: date2 } }) => {
-      const dateA = moment(date1, siteConfig.dateFromFormat);
-      const dateB = moment(date2, siteConfig.dateFromFormat);
-
-      if (dateA.isBefore(dateB)) return 1;
-
-      if (dateB.isBefore(dateA)) return -1;
-
-      return 0;
-    }
-  );
-  for (let i = 0; i < postNodes.length; i += 1) {
-    const nextID = i + 1 < postNodes.length ? i + 1 : 0;
-    const prevID = i - 1 >= 0 ? i - 1 : postNodes.length - 1;
-    const currNode = postNodes[i];
-    const nextNode = postNodes[nextID];
-    const prevNode = postNodes[prevID];
-    createNodeField({
-      node: currNode,
-      name: "nextTitle",
-      value: nextNode.frontmatter.title
-    });
-    createNodeField({
-      node: currNode,
-      name: "nextSlug",
-      value: nextNode.fields.slug
-    });
-    createNodeField({
-      node: currNode,
-      name: "prevTitle",
-      value: prevNode.frontmatter.title
-    });
-    createNodeField({
-      node: currNode,
-      name: "prevSlug",
-      value: prevNode.fields.slug
-    });
-  }
-}
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
@@ -54,8 +15,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const fileNode = getNode(node.parent);
     const parsedFilePath = path.parse(fileNode.relativePath);
     if (
-      Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
-      Object.prototype.hasOwnProperty.call(node.frontmatter, "title")
+        Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
+        Object.prototype.hasOwnProperty.call(node.frontmatter, "slug")
+    ) {
+      slug = `/${_.kebabCase(node.frontmatter.slug)}`;
+    } else if (
+        Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
+        Object.prototype.hasOwnProperty.call(node.frontmatter, "title")
     ) {
       slug = `/${_.kebabCase(node.frontmatter.title)}`;
     } else if (parsedFilePath.name !== "index" && parsedFilePath.dir !== "") {
@@ -65,32 +31,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     } else {
       slug = `/${parsedFilePath.dir}/`;
     }
-
-    if (Object.prototype.hasOwnProperty.call(node, "frontmatter")) {
-      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "slug"))
-        slug = `/${_.kebabCase(node.frontmatter.slug)}`;
-      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "date")) {
-        const date = moment(node.frontmatter.date, siteConfig.dateFromFormat);
-        if (!date.isValid)
-          console.warn(`WARNING: Invalid date.`, node.frontmatter);
-
-        createNodeField({
-          node,
-          name: "date",
-          value: date.toISOString()
-        });
-      }
-    }
     createNodeField({ node, name: "slug", value: slug });
-    postNodes.push(node);
-  }
-};
-
-exports.setFieldsOnGraphQLNodeType = ({ type, actions }) => {
-  const { name } = type;
-  const { createNodeField } = actions;
-  if (name === "MarkdownRemark") {
-    addSiblingNodes(createNodeField);
   }
 };
 
@@ -98,81 +39,272 @@ exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
   return new Promise((resolve, reject) => {
+    const indexPage = path.resolve("src/templates/index.jsx");
+    const aboutPage = path.resolve("src/templates/about.jsx");
+    const projectsPage = path.resolve("src/templates/projects.jsx");
+    const blogIndexPage = path.resolve("src/templates/blog.jsx");
     const postPage = path.resolve("src/templates/post.jsx");
     const tagPage = path.resolve("src/templates/tag.jsx");
     const categoryPage = path.resolve("src/templates/category.jsx");
+    // const authorPage = path.resolve("src/templates/author.jsx");
+
+    // if (
+    //     !fs.existsSync(
+    //         path.resolve(`content/${siteConfig.blogAuthorDir}/authors/`)
+    //     )
+    // ) {
+    //   reject(
+    //       new Error(
+    //           "The 'authors' folder is missing within the 'blogAuthorDir' folder."
+    //       )
+    //   );
+    // }
+
+    graphql(`
+    query {
+      allContentfulSite(limit: 1) {
+        edges {
+          node {
+            shortBio{
+              json
+            }
+            roles
+            socialLinks2 {
+              content
+              id
+            }            
+            profile {
+              file {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  `).then(result => {
+      result.data.allContentfulSite.edges.forEach(({ node }) => {
+        // creates index page
+        createPage({
+          path: '/',
+          component: indexPage,
+          context: node
+        });
+      })
+    });
+
+    graphql(`
+    query {
+      allContentfulSite(limit: 1) {
+        edges {
+          node {
+             aboutBio{
+              json
+            }
+            roles            
+            socialLinks2 {
+              content
+              id
+            }
+            profile {
+              file {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  `).then(result => {
+      result.data.allContentfulSite.edges.forEach(({ node }) => {
+        // creates index page
+        createPage({
+          path: '/about',
+          component: aboutPage,
+          context: node
+        });
+      })
+    });
+
+    graphql(`
+    query {
+        allContentfulProject (limit: 100) {
+          edges {
+            node {
+              title
+              createdAt
+              description
+              id
+              link
+              image {
+                fluid {
+                  src
+                  srcWebp
+                }
+              }
+            }
+          }
+        }
+    }
+  `).then(result => {
+      const items = result.data.allContentfulProject.edges;
+      // creates index page
+      createPage({
+        path: '/projects',
+        component: projectsPage,
+        context: {items}
+      });
+
+    });
+
+
+
     resolve(
-      graphql(
-        `
+        graphql(
+            `
           {
-            allMarkdownRemark(filter: {
-              frontmatter: { category: { ne: "page" } }
-            }) {
+            allMarkdownRemark(
+              limit: 1000
+              sort: { fields: [frontmatter___date], order: DESC }
+            ) {
+              totalCount
               edges {
                 node {
                   frontmatter {
+                    title
                     tags
-                    category
+                    cover
+                    date
+                    category                    
                   }
                   fields {
                     slug
                   }
+                  excerpt
+                  timeToRead
                 }
               }
             }
           }
         `
-      ).then(result => {
-        if (result.errors) {
-          /* eslint no-console: "off" */
-          console.log(result.errors);
-          reject(result.errors);
-        }
-
-        const tagSet = new Set();
-        const categorySet = new Set();
-        result.data.allMarkdownRemark.edges.forEach(edge => {
-          if (edge.node.frontmatter.tags) {
-            edge.node.frontmatter.tags.forEach(tag => {
-              tagSet.add(tag);
-            });
+        ).then(result => {
+          if (result.errors) {
+            /* eslint no-console: "off" */
+            console.log(result.errors);
+            reject(result.errors);
           }
 
-          if (edge.node.frontmatter.category) {
-            categorySet.add(edge.node.frontmatter.category);
-          }
 
-          createPage({
-            path: edge.node.fields.slug,
+          // Creates Blog Index page
+          createPaginationPages({
+            createPage,
+            edges: result.data.allMarkdownRemark.edges,
+            component: blogIndexPage,
+            pathFormatter: path => `/blog`,
+            limit: siteConfig.sitePaginationLimit
+          });
+
+          // Creates Posts
+          createLinkedPages({
+            createPage,
+            edges: result.data.allMarkdownRemark.edges,
             component: postPage,
-            context: {
-              slug: edge.node.fields.slug
-            }
+            edgeParser: edge => ({
+              path:  edge.node.fields.slug,
+              context: {
+                slug: edge.node.fields.slug
+              }
+            }),
+            circular: true
           });
-        });
 
-        const tagList = Array.from(tagSet);
-        tagList.forEach(tag => {
-          createPage({
-            path: `/tags/${_.kebabCase(tag)}/`,
-            component: tagPage,
-            context: {
-              tag
-            }
-          });
-        });
+          const tagSet = new Set();
+          const tagMap = new Map();
+          const categorySet = new Set();
+          const authorSet = new Set();
+          authorSet.add(siteConfig.blogAuthorId);
 
-        const categoryList = Array.from(categorySet);
-        categoryList.forEach(category => {
-          createPage({
-            path: `/categories/${_.kebabCase(category)}/`,
-            component: categoryPage,
-            context: {
-              category
+          result.data.allMarkdownRemark.edges.forEach(edge => {
+            if (edge.node.frontmatter.tags) {
+              edge.node.frontmatter.tags.forEach(tag => {
+                tagSet.add(tag);
+
+                const array = tagMap.has(tag) ? tagMap.get(tag) : [];
+                array.push(edge);
+                tagMap.set(tag, array);
+              });
             }
+
+            if (edge.node.frontmatter.category) {
+              categorySet.add(edge.node.frontmatter.category);
+            }
+
+            // if (edge.node.frontmatter.author) {
+            //   authorSet.add(edge.node.frontmatter.author);
+            // }
           });
-        });
-      })
+
+          const tagFormatter = tag => route =>
+              `/tags/${_.kebabCase(tag)}/${route !== 1 ? route : ""}`;
+          const tagList = Array.from(tagSet);
+          tagList.forEach(tag => {
+            // Creates tag pages
+            createPaginationPages({
+              createPage,
+              edges: tagMap.get(tag),
+              component: tagPage,
+              pathFormatter: tagFormatter(tag),
+              limit: siteConfig.sitePaginationLimit,
+              context: {
+                tag
+              }
+            });
+          });
+
+          const categoryList = Array.from(categorySet);
+          categoryList.forEach(category => {
+            createPage({
+              path: `/categories/${_.kebabCase(category)}/`,
+              component: categoryPage,
+              context: {
+                category
+              }
+            });
+          });
+
+          // const authorList = Array.from(authorSet);
+          // authorList.forEach(author => {
+          //   createPage({
+          //     path: `/author/${_.kebabCase(author)}/`,
+          //     component: authorPage,
+          //     context: {
+          //       author
+          //     }
+          //   });
+          // });
+        })
     );
   });
 };
+exports.onCreateWebpackConfig = ({ stage, actions }) => {
+  if (stage === "build-javascript") {
+    actions.setWebpackConfig({
+      plugins: [webpackLodashPlugin]
+    });
+  }
+};
+//
+// exports.onCreatePage = ({
+//                           page,
+//                           actions: { createPage, deletePage },
+//                         }) => {
+//   console.log('page', page);
+//   const slug = page.context.slug;
+//   if (slug) {
+//     deletePage(page);
+//     createPage({
+//       ...page,
+//       path: `${slug}`,
+//     });
+//   }
+// };

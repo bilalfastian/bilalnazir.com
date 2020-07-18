@@ -1,0 +1,40 @@
+.project-listing {
+    margin-top: 40px;
+}
+.project-listing .project-item {
+    display: flex;
+}
+
+
+.project-listing a.project-item:hover,
+.project-listing a.project-item {
+    text-decoration: none;
+    cursor: pointer;
+}
+.project-item .project-info,
+.project-item .project-cover{
+    padding: 0 40px 20px;
+}
+
+.project-item .project-cover img {
+    width: 500px;
+}
+
+.project-item:hover img {
+    box-shadow: 0 90px 60px -10px rgba(0,0,0,0.22),0 18px 36px -18px rgba(0,0,0,0.25);
+}
+.project-item .project-cover img {
+    width: 500px;
+    box-shadow: 0 30px 60px -10px rgba(0,0,0,0.22),0 18px 36px -18px rgba(0,0,0,0.25);
+}
+
+@media only screen and (max-width: 768px) {
+    .project-item .project-info,
+    .project-item .project-cover{
+        padding: 0 20px 20px;
+    }
+
+    .project-info p {
+        font-size: 1.5rem;
+    }
+}

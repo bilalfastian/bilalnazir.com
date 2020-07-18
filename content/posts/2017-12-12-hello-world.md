@@ -1,7 +1,6 @@
 ---
 title: Hello World!
 date: 2017-12-12 00:00:00 Z
-cover: "/assets/images/hello-world.jpg"
 category: "tech"
 tags:
     - programming

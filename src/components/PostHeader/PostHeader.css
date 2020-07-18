@@ -1,0 +1,28 @@
+.post-template .post-header,
+.post-full-header {
+    position: relative;
+    margin: 0 auto;
+    padding: 70px 170px 50px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.post-template .post-header,
+.page-template .post-header {
+    margin-bottom: 3.4rem;
+}
+
+/* ==========================================================================
+       Media Queries - Smaller than 500px
+   ========================================================================== */
+
+@media only screen and (max-width: 500px) {
+    .post-template .post-header,
+    .page-template .post-header {
+        margin-bottom: 2rem;
+    }
+
+    .post-template .post-header,
+    .post-full-header {
+        padding: 30px 20px 20px;
+    }
+}

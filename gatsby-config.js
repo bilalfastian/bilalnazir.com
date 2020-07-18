@@ -1,46 +1,63 @@
-const urljoin = require("url-join");
 const config = require("./data/SiteConfig");
 
+const pathPrefix = config.pathPrefix === "/" ? "" : config.pathPrefix;
+
 module.exports = {
-  pathPrefix: config.pathPrefix === "" ? "/" : config.pathPrefix,
+  pathPrefix: config.pathPrefix,
   siteMetadata: {
-    siteUrl: urljoin(config.siteUrl, config.pathPrefix),
+    siteUrl: config.siteUrl + pathPrefix,
     rssMetadata: {
-      site_url: urljoin(config.siteUrl, config.pathPrefix),
-      feed_url: urljoin(config.siteUrl, config.pathPrefix, config.siteRss),
+      site_url: config.siteUrl + pathPrefix,
+      feed_url: config.siteUrl + pathPrefix + config.siteRss,
       title: config.siteTitle,
       description: config.siteDescription,
-      image_url: `${urljoin(
-        config.siteUrl,
-        config.pathPrefix
-      )}/logos/logo-512.png`,
-      copyright: config.copyright
+      image_url: `${config.siteUrl + pathPrefix}/logos/logo.png`,
+      author: config.siteRssAuthor,
+      copyright: `${config.copyright.label} © ${config.copyright.year ||
+        new Date().getFullYear()}`
     }
   },
   plugins: [
     "gatsby-plugin-react-helmet",
-    "gatsby-plugin-lodash",
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        name: "assets",
-        path: `${__dirname}/static`
-      }
-    },
     {
       resolve: "gatsby-source-filesystem",
       options: {
         name: "posts",
-        path: `${__dirname}/content`
+        path: `${__dirname}/content/${config.blogPostDir}`
       }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/static/images`,
+      },
+    },
+      {
+          resolve: `gatsby-source-filesystem`,
+          options: {
+              name: `posts`,
+              path: `${__dirname}/content/${config.blogPostDir}`
+          },
+      },
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
+    `gatsby-transformer-remark`,
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: `p07dhaslyey2`,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN
+      },
     },
     // {
     //   resolve: "gatsby-source-filesystem",
     //   options: {
-    //     name: "posts",
-    //     path: `${__dirname}/public/assets/images`
+    //     name: "authors",
+    //     path: `${__dirname}/content/${config.blogAuthorDir}`
     //   }
-    // },    
+    // },
+    "gatsby-transformer-json",
     {
       resolve: "gatsby-transformer-remark",
       options: {
@@ -48,13 +65,19 @@ module.exports = {
           {
             resolve: "gatsby-remark-images",
             options: {
-              maxWidth: 690
+              maxWidth: 710
             }
           },
           {
             resolve: "gatsby-remark-responsive-iframe"
           },
-          "gatsby-remark-prismjs",
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              aliases:{sh: "bash", js:"javascript"},
+              showLineNumbers: true,
+            }
+          },
           "gatsby-remark-copy-linked-files",
           "gatsby-remark-autolink-headers"
         ]
@@ -72,7 +95,6 @@ module.exports = {
         color: config.themeColor
       }
     },
-    "gatsby-transformer-sharp",    
     "gatsby-plugin-sharp",
     "gatsby-plugin-catch-links",
     "gatsby-plugin-twitter",
@@ -81,7 +103,7 @@ module.exports = {
       resolve: "gatsby-plugin-manifest",
       options: {
         name: config.siteTitle,
-        short_name: config.siteTitleShort,
+        short_name: config.siteTitle,
         description: config.siteDescription,
         start_url: config.pathPrefix,
         background_color: config.backgroundColor,
@@ -94,14 +116,13 @@ module.exports = {
             type: "image/png"
           },
           {
-            src: "/logos/logo-512x512.png",
-            sizes: "512x512",
+            src: "/logos/logo.png",
+            sizes: "280x280",
             type: "image/png"
           }
         ]
       }
     },
-    `gatsby-plugin-sass`,
     "gatsby-plugin-offline",
     {
       resolve: "gatsby-plugin-feed",
@@ -109,7 +130,7 @@ module.exports = {
         setup(ref) {
           const ret = ref.query.site.siteMetadata.rssMetadata;
           ret.allMarkdownRemark = ref.query.allMarkdownRemark;
-          ret.generator = "GatsbyJS Advanced Starter";
+          ret.generator = "GatsbyJS Casper Starter";
           return ret;
         },
         query: `
@@ -122,6 +143,7 @@ module.exports = {
                 title
                 description
                 image_url
+                author
                 copyright
               }
             }
@@ -134,38 +156,40 @@ module.exports = {
               const { rssMetadata } = ctx.query.site.siteMetadata;
               return ctx.query.allMarkdownRemark.edges.map(edge => ({
                 categories: edge.node.frontmatter.tags,
-                date: edge.node.fields.date,
+                date: edge.node.frontmatter.date,
                 title: edge.node.frontmatter.title,
                 description: edge.node.excerpt,
+                author: rssMetadata.author,
                 url: rssMetadata.site_url + edge.node.fields.slug,
                 guid: rssMetadata.site_url + edge.node.fields.slug,
-                custom_elements: [
-                  { "content:encoded": edge.node.html },
-                  { author: config.userEmail }
-                ]
+                custom_elements: [{ "content:encoded": edge.node.html }]
               }));
             },
             query: `
             {
               allMarkdownRemark(
                 limit: 1000,
-                sort: { order: DESC, fields: [fields___date] },
+                sort: { order: DESC, fields: [frontmatter___date] },
               ) {
                 edges {
                   node {
                     excerpt
                     html
                     timeToRead
-                    fields {
-                      slug
-                      date
-                    }
+                    fields { slug }
                     frontmatter {
                       title
-                      cover
+                      cover {
+                        childImageSharp {
+                            fluid{
+                            ...GatsbyImageSharpFluid
+                          }
+                        }
+                      }
                       date
                       category
                       tags
+                      author
                     }
                   }
                 }

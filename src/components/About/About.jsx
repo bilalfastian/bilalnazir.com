@@ -1,35 +1,55 @@
 import React, { Component } from "react";
-import Img from "gatsby-image";
-import Sidebar from '../Sidebar';
+import { useQuery, gql } from '@apollo/client';
+import PageDescription from "../PageDescription/PageDescription";
+import SocialMediaIcons from "../SocialMediaIcons/SocialMediaIcons";
+import { BLOCKS, MARKS } from "@contentful/rich-text-types"
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import "./About.css";
+
+const Bold = ({ children }) => <span className="bold">{children}</span>
+const Text = ({ children }) => <p className="align-center">{children}</p>
+
+const options = {
+    renderMark: {
+        [MARKS.BOLD]: text => <PageDescription text={text}></PageDescription>,
+    },
+    renderNode: {
+        [BLOCKS.PARAGRAPH]: (node, children) => <Text>{children}</Text>,
+    },
+}
+
+
 
 class About extends Component {
   render() {
+      const {config, pageContext} = this.props;
+      const aboutBio = pageContext.aboutBio;
 
-    const { markdownRemark } = this.props.data;
+      let socialLinks = (pageContext.socialLinks2 && pageContext.socialLinks2.map(link => link.content));
+      if(!socialLinks || socialLinks.length === 0)
+          socialLinks = config.siteSocialUrls;
 
     return (
       <div className="about">
 
-        <div className="sidebarProfile">
-          <Sidebar />
-        </div>        
-        <div className="aboutMe">
-          {/* <h1>About Me</h1>
-          <p>
-            I am basically a software developer with full stack development expertise of over 5+ years, from developing APIs in NodeJS, or Java or PHP to writing application front-end with ReactJS with integration including with third parties services. I also have experience on cloud services on Salesforce Platform as well.
-          </p>
-          <p>
-            Apart from writing a good software, I enjoy mentoring the juniors to grow and work together more efficiently and effectively.
-          </p> */}
+          {/*<h3>Hi,</h3>*/}
+          {/*<PageDescription text="My name is Bilal Nazir. I am a full stack developer, having experience both on front-end and backend technologies. I have over 7 years of technical experience. I have done Bachelor in Computer Science as my field of interest."/>*/}
+          {/*<br/>*/}
+          {/*<PageDescription text="I love solving technical challenges, data structure and algorithms.*/}
+          {/*                          In addition to this, I also enjoy developing Minimum Viable Products(MVPs) for self-learning, and to improve my full stack skills." />*/}
+          {/*<br/>*/}
+          {/*<PageDescription text="Apart of having online presence with my own website,*/}
+          {/*I believe in sharing the knowledge for which I will be posting blog notes.  " />*/}
+          {/*<br/>*/}
 
-          <h1>{markdownRemark.frontmatter.title}</h1>
-          <div dangerouslySetInnerHTML={{__html: markdownRemark.html}} />
+          <div className={"page-description"}>
+              <div className="page-description">{documentToReactComponents(aboutBio.json, options)}</div>
+          </div>
 
-          {this.props.data && 
-            <Img style={{width: '100%'}} fluid={this.props.data.fileName.childImageSharp.fluid} />
-          }          
-        </div>
+          <SocialMediaIcons
+              urls={socialLinks}
+              color="currentColor"
+          />
       </div>
     );
   }
