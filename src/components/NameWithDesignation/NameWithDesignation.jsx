@@ -11,7 +11,7 @@ export default function NameWithDesignation({ text, roles }) {
         return(
             <div className={" title-typed"}>
                 <PageTitle text={text}/>
-                <h1 className={"typed-title"}>
+                <div className={"typed-title"}>
                     <span>&nbsp;</span>
                     <Typed
                         strings={roles}
@@ -20,7 +20,7 @@ export default function NameWithDesignation({ text, roles }) {
                         backDelay={1500}
                         loop
                     />
-                </h1>
+                </div>
             </div>
         )
 

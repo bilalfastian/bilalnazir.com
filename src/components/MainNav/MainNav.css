@@ -35,6 +35,7 @@
 }
 .nav-item .active {
     font-weight: 700;
+    border-bottom: 3px solid #3d88dd;
 }
 .nav-item:first-child {
     padding-left: 0;

@@ -12,7 +12,9 @@
 }
 
 .typed-title {
-    color: var(--theme-ui-colors-accent,rgb(61,136,221))
+    color: var(--theme-ui-colors-accent,rgb(61,136,221));
+    font-size: 3em;
+    font-weight: 500;
 }
 
 @media only screen and (max-width: 768px) {
