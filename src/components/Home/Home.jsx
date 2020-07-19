@@ -34,7 +34,7 @@ export default function Home(props) {
 
        return  (
            <React.Fragment>
-               <NameWithDesignation text={"BILAL NAZIR."} roles={pageContext.roles}></NameWithDesignation>
+               <NameWithDesignation text={"BILAL NAZIR. "} roles={pageContext.roles}></NameWithDesignation>
                <div className="page-description">{documentToReactComponents(shortBio.json, options)}</div>
                <SocialMediaIcons urls={socialLinks} color="currentColor" />
            </React.Fragment>

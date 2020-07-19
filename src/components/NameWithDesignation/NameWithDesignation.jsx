@@ -11,8 +11,7 @@ export default function NameWithDesignation({ text, roles }) {
         return(
             <div className={" title-typed"}>
                 <PageTitle text={text}/>
-                <div className={"typed-title"}>
-                    <span>&nbsp;</span>
+                <div className={"typed-title"}>                    
                     <Typed
                         strings={roles}
                         typeSpeed={40}
