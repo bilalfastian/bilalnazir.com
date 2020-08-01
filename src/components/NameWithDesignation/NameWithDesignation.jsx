@@ -5,7 +5,7 @@ import ThemeContext from "../../contexts/theme";
 import "./NameWithDesignation.css";
 
 export default function NameWithDesignation({ text, roles }) {
-    // const roles = ['FULL STACK DEVELOPER', 'SALESFORCE CRM DEVELOPER', 'MVP BUILDER'];
+    // const roles = ['FULL STACK Engineer', 'SALESFORCE CRM Engineer', 'MVP BUILDER'];
 
     if (text) {
         return(

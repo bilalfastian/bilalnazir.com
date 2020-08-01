@@ -2,12 +2,12 @@ module.exports = {
   blogPostDir: "posts", // The name of directory that contains your posts.
   // blogAuthorDir: "sample-authors", // The name of directory that contains your 'authors' folder.
   // blogAuthorId: "casper", // The default and fallback author ID used for blog posts without a defined author.
-  siteTitle: "Bilal Nazir | Full Stack Developer", // Site title.
-  siteTitleAlt: "Bilal Nazir | Full Stack Developer", // Alternative site title for SEO.
+  siteTitle: "Bilal Nazir | Full Stack Engineer", // Site title.
+  siteTitleAlt: "Bilal Nazir | Full Stack Engineer", // Alternative site title for SEO.
   siteLogo: "/logos/logo.png", // Logo used for SEO and manifest. e.g. "/logos/logo-1024.png",
   siteUrl: "https://bilalnazir.com", // Domain of your website without pathPrefix.
   pathPrefix: "/", // Prefixes all links. For cases when deployed to example.github.io/gatsby-starter-casper/.
-  siteDescription: "Bilal Nazir | Full Stack Developer - portfolio and personal blog site.", // Website description used for RSS feeds/meta description tag.
+  siteDescription: "Bilal Nazir | Full Stack Engineer - portfolio and personal blog site.", // Website description used for RSS feeds/meta description tag.
   siteCover: "/images/profile-bg.svg", // Optional, the cover image used in header for home page. e.g: "/images/blog-cover.jpg",
   blogSiteCover: "/images/blog-cover.jpg", // Optional, the cover image used in header for home page. e.g: "/images/blog-cover.jpg",
   siteNavigation: true, // If navigation is enabled the Menu button will be visible
